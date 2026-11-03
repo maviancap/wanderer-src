@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createUseStyles } from "react-jss";
 import ReportAbuse from "../../reportAbuse";
+import AuthenticationStore from "../../../stores/authentication";
 import UserProfileStore from "../stores/UserProfileStore";
 import useCardStyles from "../styles/card";
 import PreviousUsernames from "./previousUsernames";
@@ -76,6 +77,10 @@ const Description = props => {
     const s = useStyles();
     const cardStyles = useCardStyles();
     const store = UserProfileStore.useContainer();
+    const auth = AuthenticationStore.useContainer();
+    const [editing, setEditing] = useState(false);
+    const [draft, setDraft] = useState('');
+    const canEdit = !!auth.userId && auth.userId === store.userId;
     const [isDiscordModalOpen, setDiscordModalOpen] = useState(null);
     
     return <div className='flex' style={{ marginTop: 8 }}>
@@ -100,9 +105,20 @@ const Description = props => {
         </div>
         <div className='col-12'>
             <div className={`marginStuff ${cardStyles.card}`}>
-                <p className={s.body}>
-                    {store.userInfo && store.userInfo.description}
-                </p>
+                {editing ? <form className={s.body} onSubmit={async event => {
+                    event.preventDefault();
+                    if (await store.saveProfile({ description: draft })) setEditing(false);
+                }}>
+                    <label htmlFor='profile-about'>About me</label>
+                    <textarea id='profile-about' className='form-control' rows={5} maxLength={2000} value={draft} disabled={store.saving} onChange={event => setDraft(event.target.value)} />
+                    <p>{draft.length}/2000 characters</p>
+                    <button className='btn btn-primary me-2' type='submit' disabled={store.saving}>{store.saving ? 'Saving…' : 'Save About'}</button>
+                    <button className='btn btn-secondary' type='button' disabled={store.saving} onClick={() => setEditing(false)}>Cancel</button>
+                    {store.saveError && <p role='alert'>{store.saveError}</p>}
+                </form> : <div className={s.body}>
+                    <p>{store.userInfo?.description || 'No description yet.'}</p>
+                    {canEdit && <button className='btn btn-secondary' onClick={() => { setDraft(store.userInfo.description); setEditing(true); }}>Edit About</button>}
+                </div>}
                 <div className='divider-top me-4 ms-4'></div>
                 <div className='flex'>
                     <div className='col-6'>
@@ -111,7 +127,7 @@ const Description = props => {
                     <div className='col-6'>
                         <div className={s.report + ' me-4'}>
                             <div className={s.reportWrapper}>
-                                <ReportAbuse type='UserProfile' id={store.userId}></ReportAbuse>
+                                {!store.userInfo.websiteProfile && <ReportAbuse type='UserProfile' id={store.userId}></ReportAbuse>}
                             </div>
                         </div>
                     </div>

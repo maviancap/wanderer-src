@@ -31,7 +31,7 @@ const Creations = props => {
       });
       setIcons(obj);
     })
-  }, []);
+  }, [store.createdGames]);
   if (!store.createdGames || store.createdGames.length === 0) {
     return null;
   }

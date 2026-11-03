@@ -61,8 +61,8 @@ const Statistics = props => {
       <div className={cardStyles.card}>
         <div className={`flex ${s.padder}`}>
           <StatisticEntry label='Join Date' value={dayjs(store.userInfo.created).format('M/DD/YYYY')}></StatisticEntry>
-          <StatisticEntry label='Place Visits' value={playerVisits || (0).toLocaleString()}></StatisticEntry>
-          <StatisticEntry label='Forum Posts' value={(0).toLocaleString()}></StatisticEntry>
+          <StatisticEntry label='Place Visits' value={store.userInfo.websiteProfile ? '—' : playerVisits || (0).toLocaleString()}></StatisticEntry>
+          <StatisticEntry label='Forum Posts' value={store.userInfo.websiteProfile ? '—' : (0).toLocaleString()}></StatisticEntry>
         </div>
       </div>
     </div>

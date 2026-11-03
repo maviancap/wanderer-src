@@ -64,7 +64,7 @@ const LoginModal = props => {
   return <div className={s.wrapper}>
     <div className={s.card}>
       {error && <p className='text-danger mb-0'>{error}</p>}
-      <input ref={userRef} className={`form-control ${s.input}`} type='text' placeholder='Username'></input>
+      <input ref={userRef} className={`form-control ${s.input}`} type='email' placeholder='Email' autoComplete='email'></input>
       <input ref={passRef} className={`form-control ${s.input}`} type='password' placeholder='Password'></input>
       <div className='row'>
         <div className='col-6'>
@@ -89,13 +89,13 @@ const LoginModal = props => {
           }}>Log In</button>
         </div>
         <div className='col-6'>
-          <button className={`btn ${s.btnSecondary} ${s.btn}`}>Sign up</button>
+          <a href='/signup' className={`btn ${s.btnSecondary} ${s.btn}`}>Sign up</a>
         </div>
       </div>
       <div className='row mt-2'>
         <div className='col-12'>
           <p>
-            <a className={s.forgotPass} href='/Login/ResetPasswordRequest.aspx'>Forgot Password?</a>
+            <a className={s.forgotPass} href='/forgot-password'>Forgot Password?</a>
           </p>
         </div>
       </div>

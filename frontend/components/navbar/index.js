@@ -88,14 +88,14 @@ const Navbar = () => {
                             <Logo></Logo>
                             <NavigationLinks></NavigationLinks>
                             <Search></Search>
-                            {authStore.isPending ? null : authStore.isAuthenticated ? <LoggedInArea></LoggedInArea> :
+                            {authStore.isPending ? null : authStore.isAuthenticated ? <a className='col-auto ms-auto me-3 text-white' href={authStore.profileReady ? `/users/${authStore.userId}/profile` : '/account'}>{authStore.username} · My profile</a> :
                                                           <LoginArea></LoginArea>}
                         </div>
                     </div>
                 </div>
             </div>
         </nav>
-        {authStore.isAuthenticated && <NavSideBar mainNavBarRef={mainNavBarRef}></NavSideBar>}
+        {authStore.isAuthenticated && !authStore.user && <NavSideBar mainNavBarRef={mainNavBarRef}></NavSideBar>}
     </div>
 }
 

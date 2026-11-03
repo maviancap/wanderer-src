@@ -1,0 +1,15 @@
+.panel { max-width: 470px; margin: 44px auto; padding: 32px; border-top: 5px solid #02a653; background: var(--background-color-secondary, #fff); color: var(--text-color-primary, #303338); box-shadow: 0 2px 12px #182c3814; }
+.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: #087d45; }
+.panel h1 { font-size: 30px; margin: 12px 0; }
+.panel fieldset { border: 0; padding: 0; margin: 24px 0 0; min-width: 0; }
+.panel label { display: block; font-weight: 600; margin: 16px 0; }
+.panel input { display: block; width: 100%; box-sizing: border-box; margin-top: 7px; padding: 11px 12px; border: 1px solid #aeb5ba; border-radius: 3px; color: #303338; background: #fff; font: inherit; }
+.panel input:focus-visible, .panel button:focus-visible, .panel a:focus-visible { outline: 3px solid #119ee0; outline-offset: 3px; }
+.panel button { width: 100%; padding: 12px; margin: 12px 0; background: #078348; color: #fff; font: inherit; font-weight: 700; border: 0; border-radius: 3px; cursor: pointer; }
+.panel button:hover { background: #096c40; }
+.panel button:disabled { opacity: .65; cursor: wait; }
+.panel a { color: #0879b8; text-decoration: underline; }
+.error { padding: 12px; background: #fff0ef; color: #9a2118; }
+.success { padding: 12px; background: #e8f7ed; color: #185d33; }
+.links { border-top: 1px solid #cfd5d8; margin-top: 20px; padding-top: 12px; font-size: 14px; }
+@media (max-width: 520px) { .panel { margin: 20px 12px; padding: 22px; } }

@@ -19,6 +19,9 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 module.exports = withBundleAnalyzer({
     reactStrictMode: true,
     outputFileTracingRoot: __dirname,
+    outputFileTracingIncludes: {
+        '/*': ['./config.json'],
+    },
     turbopack: {
         root: __dirname,
     },

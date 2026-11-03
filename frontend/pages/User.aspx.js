@@ -9,7 +9,8 @@ export async function getServerSideProps({ query, res, req }) {
   const userId = query['ID'];
   return {
     redirect: {
-      destination: `/users/${userId}/profile`,
+      destination: `/users/${encodeURIComponent(String(userId || ''))}/profile`,
+      permanent: false,
     },
     props: {}
   };

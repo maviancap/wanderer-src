@@ -98,6 +98,7 @@ const Avatar = props => {
     const [thumb3D, setThumb3D] = useState(new Thumbnail3DHandler());
     
     useEffect(() => {
+        if (store.userInfo?.websiteProfile) return;
         let cancelled = false;
 
         async function run() {
@@ -128,6 +129,7 @@ const Avatar = props => {
     }, [userId]);
     
     useEffect(() => {
+        if (store.userInfo?.websiteProfile) return;
         let cancelled = false;
         const set3DReadyIfActive = value => {
             if (!cancelled) set3DReady(value);
@@ -158,6 +160,7 @@ const Avatar = props => {
     }, [thumbType, store.userId, userId]);
     
     useEffect(() => {
+        if (store.userInfo?.websiteProfile) return;
         if (typeof THREE !== "undefined" && thumb3D.scene === null) {
             thumb3D.Init(300);
         }
@@ -168,6 +171,8 @@ const Avatar = props => {
         };
     }, [store.userId]);
     
+    if (store.userInfo?.websiteProfile) return <div className='flex marginStuff'><div className='col-12'><Subtitle>Currently Wearing</Subtitle><div className='card p-3'><p>No avatar items yet.</p></div></div></div>;
+
     return <div className='flex marginStuff'>
         <div className='col-12'>
             <Subtitle>Currently Wearing</Subtitle>

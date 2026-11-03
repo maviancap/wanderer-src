@@ -118,12 +118,13 @@ const Friends = props => {
     </div>
     <div className='col-2'>
       <div className={`${s2.buttonWrapper}`}>
-        <SmallTextLink href={`/users/${store.userId}/friends`}>See All</SmallTextLink>
+        {!store.userInfo.websiteProfile && <SmallTextLink href={`/users/${store.userId}/friends`}>See All</SmallTextLink>}
       </div>
     </div>
     <div className='col-12'>
       <div className={`marginStuff ${cardStyles.card}`}>
         <ul className={'flex pt-3 pb-3 pe-3 ps-3 me-0 ms-0 ' + s.sideRow}>
+          {store.userInfo.websiteProfile && <li>No friends yet.</li>}
           {
             store.friends && store.friends.slice(0, 10).map(v => {
               return <li className={s.listItemFriend}>

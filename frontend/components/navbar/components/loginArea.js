@@ -62,9 +62,9 @@ const LoginArea = props => {
             <a className={s.link} onClick={(e) => {
               e.preventDefault();
               if (getFlag('clientSideRenderingEnabled', false)) {
-                Router.push('/');
+                Router.push('/login');
               } else {
-                window.location.href = '/';
+                window.location.href = '/login';
               }
             }}>
               Login
@@ -74,7 +74,7 @@ const LoginArea = props => {
         </div>
         <div className='col-6'>
           <p className={s.text}>
-            <a className={`${s.link} ${s.signupLink}`} href='/'>
+            <a className={`${s.link} ${s.signupLink}`} href='/signup'>
               Sign Up
             </a>
           </p>

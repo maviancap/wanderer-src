@@ -1,7 +1,2 @@
-import Login from "../components/loginPage";
-
-const LoginPage = () => {
-    return <Login></Login>
-}
-
-export default LoginPage;
+import AccountAuth from '../components/accountAuth';
+export default function Page() { return <AccountAuth mode='login' />; }

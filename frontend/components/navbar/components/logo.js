@@ -72,8 +72,8 @@ const Logo = () => {
     <div className={s.openSideNavMobile + ' icon-menu'} onClick={() => {
       navStore.setIsSidebarOpen(!navStore.isSidebarOpen);
     }}></div>
-    <a className={s.imgDesktop} href='/home'></a>
-    <a className={s.imgMobile} href='/home'></a>
+    <a className={s.imgDesktop} href='/'></a>
+    <a className={s.imgMobile} href='/'></a>
     {/*<div className={s.imgMobileWrapper}>
     
     </div>*/}

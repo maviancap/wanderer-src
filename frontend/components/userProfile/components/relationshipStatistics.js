@@ -67,11 +67,11 @@ const RelationshipStatistics = props => {
         {Number.isSafeInteger(value) ? abbreviateNumber(value) : '...'}
       </a>
     </Link>*/}
-    <Link href={id === "rap" ? `/internal/collectibles?userId=${userId}` : `/users/${userId}/friends#!${id}`}>
+    {props.disabled ? <p className={s.statText}>{Number.isSafeInteger(value) ? abbreviateNumber(value) : '0'}</p> : <Link href={id === "rap" ? `/internal/collectibles?userId=${userId}` : `/users/${userId}/friends#!${id}`}>
       <a className={s.statTextContainer}>
         <h3 className={s.statText}>{Number.isSafeInteger(value) ? abbreviateNumber(value) : '...'}</h3>
       </a>
-    </Link>
+    </Link>}
   </li>
 }
 

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Head from "next/head";
 import { createUseStyles } from "react-jss";
 import NotFoundPage from "../../pages/404";
 import AuthenticationStore from "../../stores/authentication";
@@ -37,24 +38,28 @@ const UserProfile = props => {
     const s = useStyles();
     const store = UserProfileStore.useContainer();
     const auth = AuthenticationStore.useContainer();
+    const { setUserId } = store;
     
     useEffect(() => {
-        store.setUserId(props.userId);
-    }, [props]);
+        if (auth.isPending || (auth.userId === props.userId && !auth.profileReady)) return;
+        setUserId(props.userId);
+    }, [props.userId, auth.isPending, auth.userId, auth.profileReady, setUserId]);
     
-    useEffect(() => {
-        if (auth.isPending || !auth.userId || !store.userId) return;
-        store.getFriendStatus(auth.userId);
-    }, [store.userId, auth.userId, auth.isPending]);
-    
-    if (!store.userId || !store.userInfo || auth.isPending)
-        return null;
-    
+    if (auth.userId === props.userId && auth.profileError) return <div className='container' role='alert'>{auth.profileError} <button onClick={auth.retryProfile}>Try again</button></div>;
+    if (store.lastError === 'InvalidUserId') return <NotFoundPage/>;
+    if (store.lastError) return <div className='container' role='alert'>{store.lastError} <button onClick={store.retry}>Try again</button></div>;
+    if (!store.userId || !store.userInfo || store.loading || auth.isPending)
+        return <div className='container' role='status'>Loading profile…</div>;
+
     if (store.userInfo.isBanned)
         return <NotFoundPage/>;
     
     return <div className={`${s.container} container`}>
-        <AdBanner/>
+        <Head>
+            <title>{store.username}’s Profile - Wanderer</title>
+            <meta name='description' content={store.userInfo.description || `${store.username}’s profile on Wanderer`} />
+        </Head>
+        {!store.userInfo.websiteProfile && <AdBanner/>}
         <div className={s.profileContainer}>
             <ProfileHeader/>
             <HorizontalTabs options={[
@@ -64,11 +69,13 @@ const UserProfile = props => {
                         <Description/>
                         <Avatar userId={store.userId}/>
                         <Friends/>
+                        {!store.userInfo.websiteProfile && <>
                         <Collections userId={store.userId}/>
                         <Groups/>
                         <Favorites userId={store.userId}/>
                         <RobloxBadges userId={store.userId}/>
                         <Badges userId={store.userId}/>
+                        </>}
                         <Statistics/>
                     </>
                 },

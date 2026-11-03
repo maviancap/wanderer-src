@@ -218,6 +218,14 @@ const ProfileHeader = props => {
   
   useEffect(() => {
     if (auth.isPending) return;
+    if (store.userInfo.websiteProfile) {
+      setDropdownOptions(auth.userId === store.userId ? [
+        { name: 'Update Status', onClick: () => setEditStatus(value => !value) },
+        { name: 'Account Settings', url: '/account' },
+      ] : []);
+      return;
+    }
+
     
     multiGetPresence({ userIds: [store.userId] }).then((d) => {
       setStatus(d[0]);
@@ -314,7 +322,7 @@ const ProfileHeader = props => {
   const cardStyles = useCardStyles();
   const statusClass = status ? s.userStatusMargined : '';
   
-  const showButtons = auth.userId != store.userId && !auth.isPending;
+  const showButtons = !store.userInfo.websiteProfile && auth.userId != store.userId && !auth.isPending;
   
   const BcIcon = () => {
     if (bcLevel === 0) {
@@ -360,7 +368,7 @@ const ProfileHeader = props => {
             </div>*/}
             <div className={`${s.thumbnailContainer}`}>
               <div className={s.avatarHeadshotContainer}>
-                <PlayerHeadshot className={s.image} id={store.userId} name={store.username} />
+                {store.userInfo.websiteProfile ? <img className={s.image} src='/img/placeholder.png' alt={`${store.username}’s avatar`} width='100' height='100' /> : <PlayerHeadshot className={s.image} id={store.userId} name={store.username} />}
                 {status && <div className={s.activityWrapper}><Activity relative={false} {...status}></Activity></div>}
               </div>
             </div>
@@ -369,26 +377,22 @@ const ProfileHeader = props => {
                 {dropdownOptions && <Dropdown2016 options={dropdownOptions} dropdownClass={s.dropdownClass} wrapperClass={s.dropdownWrapper} />}
               </div></h2>
               {editStatus ? <div>
-                <input ref={statusInput} type='text' className={s.updateStatusInput} maxLength={255} defaultValue={store.status?.status || ''} />
-                <p className={s.updateStatusButton} onClick={() => {
-                  let v = statusInput.current.value;
-                  store.setStatus({
-                    status: v,
-                  });
-                  setEditStatus(false);
-                  updateStatus({
-                    newStatus: v,
-                    userId: auth.userId,
-                  })
-                }}>Update Status</p>
+                <label htmlFor='profile-status'>Status</label>
+                <input id='profile-status' ref={statusInput} type='text' className={s.updateStatusInput} maxLength={255} disabled={store.saving} defaultValue={store.status?.status || ''} />
+                <button disabled={store.saving} className={s.updateStatusButton} onClick={async () => {
+                  const saved = await store.saveProfile({ status: statusInput.current.value });
+                  if (saved) setEditStatus(false);
+                }}>{store.saving ? 'Saving…' : 'Save status'}</button>
+                <button disabled={store.saving} onClick={() => setEditStatus(false)}>Cancel</button>
+                {store.saveError && <p role='alert'>{store.saveError}</p>}
               </div> : (!store.status || !store.status.status) ? <p className={`${statusClass} ${s.userStatus} ${s.userStatusInvisible}`}>&emsp;</p> : <p className={s.userStatus}>&quot;{store.status.status}&quot;</p>
               }
               <div className={`flex ${s.relationshipContainer}`}>
                 <ul className={`${s.relationshipList}`}>
-                  <RelationshipStatistics id='friends' label='Friends' value={store.friends?.length} userId={store.userId} />
-                  <RelationshipStatistics id='followers' label='Followers' value={store.followersCount} userId={store.userId} />
-                  <RelationshipStatistics id='followings' label='Following' value={store.followingsCount} userId={store.userId} />
-                  <RelationshipStatistics id='rap' label='RAP' value={store.userInfo.inventoryRap} userId={store.userId} />
+                  <RelationshipStatistics disabled={store.userInfo.websiteProfile} id='friends' label='Friends' value={store.friends?.length} userId={store.userId} />
+                  <RelationshipStatistics disabled={store.userInfo.websiteProfile} id='followers' label='Followers' value={store.followersCount} userId={store.userId} />
+                  <RelationshipStatistics disabled={store.userInfo.websiteProfile} id='followings' label='Following' value={store.followingsCount} userId={store.userId} />
+                  <RelationshipStatistics disabled={store.userInfo.websiteProfile} id='rap' label='RAP' value={store.userInfo.inventoryRap || 0} userId={store.userId} />
                 </ul>
                 {/*
                   showButtons && <>
